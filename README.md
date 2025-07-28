@@ -11,6 +11,6 @@
 3. Open Terminal
 ```
 pip install streamlit
-pip install google-cloud-datastore (optional if using GCP)
+pip install google-cloud-datastore
 streamlit run app.py
 ```
