@@ -1,0 +1,16 @@
+# festival_management_app
+
+1.Downloads
+- vs code (https://code.visualstudio.com/download)
+- git (https://git-scm.com/downloads/win)
+- GitHub Desktop (https://desktop.github.com/download/)
+- Python (https://www.python.org/downloads/)
+2. Setup
+- Clone repository
+- Open folder in vs code 
+3. Open Terminal
+```
+pip install streamlit
+pip install google-cloud-datastore (optional if using GCP)
+streamlit run app.py
+```
