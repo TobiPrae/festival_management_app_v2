@@ -1,8 +1,6 @@
 import streamlit as st
 from utils.functions import require_login
 
-require_login() 
-
 st.title("Kommunenzeltfest 2026")
 
 st.markdown("""
