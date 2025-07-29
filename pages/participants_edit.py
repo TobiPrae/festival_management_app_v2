@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
-from utils.functions_gcp import read_from_datastore
-from utils.functions_gcp import update_to_datastore
-from utils.functions_gcp import delete_from_datastore
+from utils.functions import read_from_datastore
+from utils.functions import update_to_datastore
+from utils.functions import delete_from_datastore
 from utils.functions import require_login
 
 require_login() 

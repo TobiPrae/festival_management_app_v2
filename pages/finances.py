@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 from utils.functions import get_json
 import pandas as pd
-from utils.functions_gcp import read_from_datastore
+from utils.functions import read_from_datastore
 from utils.functions import require_login
 
 require_login() 
@@ -13,7 +13,6 @@ st.title("Finanzen")
 variables = read_from_datastore("variables")[0]
 todos = read_from_datastore("todos")
 participants = read_from_datastore("participants")
-alias_mapping = get_json("alias_mapping")
 
 # Convert to DataFrame
 df_participants = pd.DataFrame(participants)
@@ -23,12 +22,12 @@ df_todos = pd.DataFrame(todos)
 summary = df_todos.groupby("category").agg({
     "estimated_cost": "sum",
     "actual_cost": "sum"
-}).reset_index()
+}).reset_index().sort_values(by=["actual_cost"], ascending=[ False])
 
 summary_tasks = df_todos.groupby("task").agg({
     "estimated_cost": "sum",
     "actual_cost": "sum"
-}).reset_index()
+}).reset_index().sort_values(by=["actual_cost"], ascending=[ False])
 
 # Compute total expenses
 beverage_amount_paid = df_participants["beverage_amount_paid"].sum()

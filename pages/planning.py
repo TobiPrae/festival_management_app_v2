@@ -1,10 +1,11 @@
 import streamlit as st
 import pandas as pd
 from utils.functions import get_json
-from utils.functions_gcp import read_from_datastore
-from utils.functions_gcp import update_to_datastore
-from utils.functions_gcp import delete_from_datastore
-from utils.functions_gcp import add_to_datastore
+from utils.functions import read_from_datastore
+from utils.functions import update_to_datastore
+from utils.functions import delete_from_datastore
+from utils.functions import add_to_datastore
+from utils.functions import recalculate_expenses
 from utils.functions import require_login
 
 require_login() 
@@ -20,7 +21,7 @@ st.title("Planung")
 
 # Load and convert to DataFrame
 df = pd.DataFrame(todos)
-display_cols = ["task", "category", "responsible", "done", "paid", "description", "quantity", "estimated_price", "estimated_cost", "actual_cost"]
+display_cols = ["task", "category", "responsible", "done", "description", "quantity", "estimated_price", "estimated_cost", "actual_cost"]
 
 # Filtering part
 st.sidebar.header("Filteroptionen")
@@ -34,9 +35,6 @@ selected_done = st.sidebar.selectbox("Erledigt", done_options)
 category_options = ["Alle"] + sorted(df["category"].dropna().unique().tolist())
 selected_category = st.sidebar.selectbox("Kategorie", category_options)
 
-paid_options = ["Alle"] + sorted(df["paid"].dropna().unique().tolist())
-selected_paid = st.sidebar.selectbox("Ausbezahlt", paid_options)
-
 # Apply filters
 filtered_df = df.copy()
 if selected_responsible != "Alle":
@@ -45,8 +43,6 @@ if selected_done != "Alle":
     filtered_df = filtered_df[filtered_df["done"] == selected_done]
 if selected_category != "Alle":
     filtered_df = filtered_df[filtered_df["category"] == selected_category]
-if selected_paid != "Alle":
-    filtered_df = filtered_df[filtered_df["paid"] == selected_paid]
 
 # Show filtered data
 st.dataframe(filtered_df[display_cols].rename(columns=alias_mapping), use_container_width=True)
@@ -62,7 +58,6 @@ with st.expander("**Hinzufügen oder bearbeiten**", expanded=False):
         "task": "Default Aufgabe",
         "responsible": "tbd",
         "done": False,
-        "paid": False,
         "category": "Sonstige",
         "description": "",
         "quantity": 0.0,
@@ -82,7 +77,6 @@ with st.expander("**Hinzufügen oder bearbeiten**", expanded=False):
         task = st.text_input("Task", task_row.get("task", ""))
         responsible = st.selectbox("Verantwortlich", participant_names, index=participant_names.index(task_row.get("responsible", "tbd")) if task_row.get("responsible") in participant_names else len(participant_names) - 1)
         done = st.selectbox("Erledigt", [True, False], index=0 if task_row.get("done") else 1)
-        paid = st.selectbox("Ausbezahlt", [True, False], index=0 if task_row.get("paid") else 1)
         category_options = ["Sonstiges", "Essen", "Getränke"]
         current_category = task_row.get("category", "Sonstiges")
         category = st.selectbox("Kategorie", category_options, 
@@ -104,7 +98,6 @@ if submitted:
         "task": task,
         "responsible": responsible,
         "done": done,
-        "paid": paid,
         "category": category,
         "description": description,
         "quantity": quantity,
@@ -117,14 +110,17 @@ if submitted:
     if selected_task != "Neu":
         entity_id = task_row["ID"]
         update_to_datastore("todos", entity_id, updated_task)
+        recalculate_expenses()
         st.rerun()
     else:
         add_to_datastore("todos", updated_task)
+        recalculate_expenses()
         st.rerun()
 
 if deleted:
     if selected_task != "Neu":
         delete_from_datastore("todos", task_row["ID"])
+        recalculate_expenses()
         st.rerun()
     else:
         st.warning("Kein Eintrag zum Löschen ausgewählt.")

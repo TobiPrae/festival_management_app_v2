@@ -14,8 +14,11 @@ pages = {
     ],
     "Organisatorisches" :[
         st.Page("pages/planning.py", title="✅ Planung"),
-        st.Page("pages/finances.py", title="📊 Finanzen"),
         st.Page("pages/settings.py", title="⚙️ Einstellungen"),
+    ],
+    "Finanzen"  :[
+        st.Page("pages/finances.py", title="📊 Übersicht"),
+        st.Page("pages/expenses.py", title="💸 Ausgaben"),
     ],
     "Teilnehmer" :[
         st.Page("pages/participants_overview.py", title="📋 Übersicht"),

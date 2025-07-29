@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.functions_gcp import add_to_datastore
+from utils.functions import add_to_datastore
 from utils.functions import require_login
 
 require_login() 

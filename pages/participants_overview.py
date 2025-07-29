@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from utils.functions import get_json
-from utils.functions_gcp import read_from_datastore
+from utils.functions import read_from_datastore
 from utils.functions import require_login
 
 require_login() 
