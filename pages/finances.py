@@ -34,14 +34,12 @@ beverage_amount_paid = df_participants["beverage_amount_paid"].sum()
 ticket_amount_paid = df_participants["ticket_amount_paid"].sum()
 estimated_cost = df_todos["estimated_cost"].sum()
 actual_cost = df_todos["actual_cost"].sum()
-
-
+savings = variables["savings"]
+donation = variables["donation"]
 df_participants["beverage_amount_target"] = (df_participants["count_alcoholic_bewerages"] * variables['alcoholic_beverage_price']) + (df_participants["count_non_alcoholic_bewerages"] * variables['non_alcoholic_beverage_price'])
 df_participants["ticket_amount_target"] = np.where(df_participants["attending_days"] == "Both", variables['two_day_ticket'], variables['one_day_ticket']) 
 beverage_amount_target = df_participants["beverage_amount_target"].sum()
 ticket_amount_target = df_participants["ticket_amount_target"].sum()
-
-# Create dicts mapping category -> costs
 estimated_costs = dict(zip(summary["category"], summary["estimated_cost"]))
 actual_costs = dict(zip(summary["category"], summary["actual_cost"]))
 estimated_costs_detail = dict(zip(summary_tasks["task"], summary_tasks["estimated_cost"]))
@@ -62,16 +60,16 @@ if selected_cost_options == "Geschätzt":
     cost_dict_detail = estimated_costs_detail
     beverage_amount = beverage_amount_target
     ticket_amount = ticket_amount_target
-    total_paid = beverage_amount_target + ticket_amount_target
-    total_cost = estimated_cost 
+    total_paid = beverage_amount_target + ticket_amount_target + savings
+    total_cost = estimated_cost + donation
 
 else:
     cost_dict = actual_costs
     cost_dict_detail = actual_costs_detail
     beverage_amount = beverage_amount_paid
     ticket_amount = ticket_amount_paid
-    total_paid = beverage_amount_paid + ticket_amount_paid
-    total_cost = actual_cost
+    total_paid = beverage_amount_paid + ticket_amount_paid + savings
+    total_cost = actual_cost + donation
 
 diff = total_paid - total_cost
 
@@ -99,6 +97,13 @@ with left_col:
                 st.write(task)
             with col2:
                 st.write(f"{cost:.2f} €")
+
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        st.markdown("Spenden")
+    with col2:
+        st.write(f"{donation:.2f} €")
+            
     if diff > 0:
         col1, col2 = st.columns([2, 1])
         with col1:
@@ -109,19 +114,20 @@ with left_col:
                 unsafe_allow_html=True
             )
 
+
+
 with right_col:
     total_income = beverage_amount + ticket_amount
     col1, col2 = st.columns([2, 1])
     with col1:
         st.write("Getränke")
+        st.write("Pauschale")
+        st.write("Vorjahresgewinn")
     with col2:
         st.write(f"{beverage_amount:.2f} €")
-
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        st.write("Pauschale")
-    with col2:
         st.write(f"{ticket_amount:.2f} €")
+        st.write(f"{savings:.2f} €")
+
     if diff < 0:
         col1, col2 = st.columns([2, 1])
         with col1:

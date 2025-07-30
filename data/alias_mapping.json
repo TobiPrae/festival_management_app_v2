@@ -26,6 +26,8 @@
     "count_non_alcoholic_bewerages": "Nicht-alkoholische Getr\u00e4nke (Anzahl)",
     "beverage_amount_target": "Getr\u00e4nkebezahlung (Soll)",
     "beverage_amount_paid": "Getr\u00e4nkebezahlung (Ist)",
-    "open_expenses": "Offene Ausgaben"
+    "open_expenses": "Offene Ausgaben",
+    "savings": "Vorjahresgewinn",
+    "donation": "Spenden"
 
 }

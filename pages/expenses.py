@@ -12,6 +12,7 @@ require_login()
 expenses = read_from_datastore("expenses")
 alias_mapping = get_json("alias_mapping")
 participants = read_from_datastore("participants")
+variables = read_from_datastore("variables")[0]
 
 st.set_page_config(page_title="Ausgaben")
 st.title("Ausgaben")
@@ -22,6 +23,8 @@ revenue = df_participants["beverage_amount_paid"].sum() + df_participants["ticke
 df_expenses = pd.DataFrame(expenses)
 df_expenses["paid"] = df_expenses["actual_cost_paid"] >= df_expenses["actual_cost"]
 total_paid = df_expenses["actual_cost_paid"].sum()
+savings = variables["savings"]
+donation = variables["donation"]
 
 # Apply filters
 df_expenses = df_expenses.sort_values(by=["actual_cost"], ascending=[ False])
@@ -29,12 +32,16 @@ df_expenses = df_expenses.sort_values(by=["actual_cost"], ascending=[ False])
 col1, col2 = st.columns([2, 1])
 with col1:
     st.write(f"Gesamteinnahmen")
+    st.write(f"\\+ Vorjahresgewinn")
     st.write(f"\\- Kosten Ausbezahlt")
+    st.write(f"\\- Spende")
     st.write(f"**= Rest**")
 with col2:
     st.write(f"{revenue:.2f} €")
+    st.write(f"{savings:.2f} €")
     st.write(f"{total_paid:.2f} €")
-    st.write(f"**{revenue - total_paid:.2f} €**")
+    st.write(f"{donation:.2f} €")
+    st.write(f"**{revenue + savings - donation - total_paid:.2f} €**")
 
 # Show filtered data
 st.dataframe(df_expenses[["responsible", "actual_cost", "actual_cost_paid", "paid"]].rename(columns=alias_mapping), use_container_width=True)

@@ -7,14 +7,15 @@ from utils.functions import require_login
 require_login() 
 
 alias_mapping = get_json("alias_mapping")
-variables = read_from_datastore("variables")
+variables = read_from_datastore("variables")[0]
+#variables = dict(sorted(variables.items()))
 
 st.set_page_config(page_title="Einstellungen")
 st.title("Einstellungen")
 
 updated_settings = {}
 
-for key, value in variables[0].items():
+for key, value in variables.items():
     if key == 'ID':
         updated_settings[key] = value
     else:
