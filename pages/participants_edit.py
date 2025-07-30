@@ -42,6 +42,7 @@ with st.form("edit_or_create_task_name"):
     ticket_amount_paid = st.number_input("Pauschale (Ist)", value=float(participant_row.get("ticket_amount_paid", 0)))
     count_alcoholic_bewerages = st.number_input("Alkoholische Getränke (Anzahl)", value=float(participant_row.get("count_alcoholic_bewerages", 0)))
     count_non_alcoholic_bewerages = st.number_input("Nicht-alkoholische Getränke (Anzahl)", value=float(participant_row.get("count_non_alcoholic_bewerages", 0)))
+    count_weisswurst = st.number_input("Weißwurst (Anzahl)", value=float(participant_row.get("count_weisswurst", 0)))
     beverage_amount_paid = st.number_input("Getränkebezahlung (Ist)", value=float(participant_row.get("beverage_amount_paid", 0)))
     
     # Buttons
@@ -57,6 +58,7 @@ if submitted:
         "ticket_amount_paid": ticket_amount_paid,
         "count_alcoholic_bewerages": count_alcoholic_bewerages,
         "count_non_alcoholic_bewerages": count_non_alcoholic_bewerages,
+        "count_weisswurst": count_weisswurst,
         "beverage_amount_paid": beverage_amount_paid,
     }
 

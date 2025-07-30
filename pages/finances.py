@@ -36,7 +36,7 @@ estimated_cost = df_todos["estimated_cost"].sum()
 actual_cost = df_todos["actual_cost"].sum()
 savings = variables["savings"]
 donation = variables["donation"]
-df_participants["beverage_amount_target"] = (df_participants["count_alcoholic_bewerages"] * variables['alcoholic_beverage_price']) + (df_participants["count_non_alcoholic_bewerages"] * variables['non_alcoholic_beverage_price'])
+df_participants["beverage_amount_target"] = (df_participants["count_alcoholic_bewerages"] * variables['alcoholic_beverage_price']) + (df_participants["count_non_alcoholic_bewerages"] * variables['non_alcoholic_beverage_price']) + (df_participants["count_weisswurst"] * variables['weisswurst_price'])
 df_participants["ticket_amount_target"] = np.where(df_participants["attending_days"] == "Both", variables['two_day_ticket'], variables['one_day_ticket']) 
 beverage_amount_target = df_participants["beverage_amount_target"].sum()
 ticket_amount_target = df_participants["ticket_amount_target"].sum()
@@ -107,7 +107,10 @@ with left_col:
     if diff > 0:
         col1, col2 = st.columns([2, 1])
         with col1:
-            st.markdown("Gewinn")
+            st.markdown(
+                f"<span style='color: green;'>Gewinn</span>",
+                unsafe_allow_html=True
+            )
         with col2:
             st.markdown(
                 f"<span style='color: green;'>{diff:.2f} €</span>",
@@ -120,7 +123,7 @@ with right_col:
     total_income = beverage_amount + ticket_amount
     col1, col2 = st.columns([2, 1])
     with col1:
-        st.write("Getränke")
+        st.write("Getränke und Weißwürste")
         st.write("Pauschale")
         st.write("Vorjahresgewinn")
     with col2:
@@ -131,7 +134,10 @@ with right_col:
     if diff < 0:
         col1, col2 = st.columns([2, 1])
         with col1:
-            st.markdown("Verlust")
+            st.markdown(
+                f"<span style='color: red;'>Verlust</span>",
+                unsafe_allow_html=True
+            )
         with col2:
             st.markdown(
                 f"<span style='color: red;'>{abs(diff):.2f} €</span>",

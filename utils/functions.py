@@ -198,3 +198,26 @@ def recalculate_expenses():
         if r not in current_responsibles:
             key = client.key("expenses", r)
             client.delete(key)
+
+
+def add_property(kind, property, default_value):
+    """
+    Adds a new property with a default value to all entities of a given kind
+    in Google Cloud Datastore, if the property does not already exist.
+
+    Parameters:
+    - kind (str): The Datastore kind (equivalent to a table name).
+    - property (str): The name of the new property to add.
+    - default_value (Any): The default value to assign to the new property.
+
+    This function uses a service account key provided via Streamlit secrets.
+    """
+    service_account_info = dict(st.secrets["service_account_key"])
+    client = datastore.Client.from_service_account_info(service_account_info)
+
+    query = client.query(kind=kind)
+
+    for entity in query.fetch():
+        if property not in entity:
+            entity[property] = default_value
+            client.put(entity)

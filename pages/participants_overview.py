@@ -19,7 +19,8 @@ st.title("Teilnehmerübersicht")
 df = pd.DataFrame(participants)
 
 # Create new columns
-df["beverage_amount_target"] = (df["count_alcoholic_bewerages"] * variables['alcoholic_beverage_price']) + (df["count_non_alcoholic_bewerages"] * variables['non_alcoholic_beverage_price'])
+df["beverage_amount_target"] = (df["count_alcoholic_bewerages"] * variables['alcoholic_beverage_price']) + (df["count_non_alcoholic_bewerages"] * variables['non_alcoholic_beverage_price']) + (df["count_weisswurst"] * variables['weisswurst_price'])
+
 df["ticket_amount_target"] = np.where(df["attending_days"] == "Beide", variables['two_day_ticket'], variables['one_day_ticket']) 
 
 df["beverages_fully_paid"] = df["beverage_amount_target"] <= df['beverage_amount_paid']
@@ -35,6 +36,7 @@ display_cols = ["name",
                 "ticket_amount_paid",
                 "count_alcoholic_bewerages",
                 "count_non_alcoholic_bewerages",
+                "count_weisswurst",
                 "beverage_amount_target",
                 "beverage_amount_paid",
 ]

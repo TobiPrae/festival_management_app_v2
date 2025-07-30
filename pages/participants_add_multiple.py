@@ -25,6 +25,7 @@ if st.button("Teilnehmer hinzufügen"):
             "attending_days": attending_day,
             "count_alcoholic_bewerages": 0.0,
             "count_non_alcoholic_bewerages": 0.0,
+            "count_weisswurst": 0.0,
             "category": category,
             "ticket_amount_paid": 0.0,
             "beverage_amount_paid": 0.0,
